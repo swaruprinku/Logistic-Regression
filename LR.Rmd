@@ -1,0 +1,65 @@
+---
+title: "Built a logistic regression model to predict customer churn in the Telecom industry"
+author: "Swarup"
+date: "13/10/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+####The primary objective was to investigate the parameters contributing for customer churn (attrition) in the Telecom Industry. A Logistic Regression Model was developed and validated with test data to predict customer churn.
+
+#Loading the DataSet
+```{r}
+library(readxl)
+mydata=read_xlsx(file.choose(),sheet = 2)
+```
+#Exploratory Data Analysis
+```{r}
+library(GGally)
+library(dplyr)
+glimpse(mydata)
+```
+#Structure of the Data Set
+```{r}
+str(mydata)
+library(psych)
+describe(mydata)
+```
+#Check NA values
+```{r}
+nacount=sapply(mydata,function(y)sum(is.na(y)))
+nacount
+#Change Churn,ContractRenewal,DataPlan to factor variables
+attach(mydata)
+mydata$Churn=as.factor(mydata$Churn)
+mydata$ContractRenewal=as.factor(mydata$ContractRenewal)
+mydata$DataPlan=as.factor(mydata$DataPlan)
+```
+##Observation
+*No NA values found*
+*Churn,ContractRenewal,DataPlan are converted to factor variables*
+
+#Univariate Analysis
+
+```{r}
+#ggp=ggpairs(mydata[-c(1,3,4)], aes(color = mydata$Churn))+ theme_bw()
+#print(ggp,progress=FALSE)
+boxplot(mydata[-c(1,3,4)])
+```
+##Observation
+
+*Outlier values found for all variables*
+
+```{r}
+#rosnerTest--Outlier Detection
+```
+#Bivariate Analysis
+```{r}
+ggp=ggpairs(mydata[-c(1,3,4)], aes(color = mydata$Churn))+ theme_bw()
+print(ggp,progress=FALSE)
+ggplot(mydata,aes(x=mydata$AccountWeeks,fill=Churn))+geom_histogram(binwidth = 50)
+```
+
